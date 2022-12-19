@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Message</title>
+    </head>
+    <body>
+        <h1>SendMessage</h1>
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>SEND</button>
+        </form>
+        <ol id='messages'>
+        </ol>
+        <script>
+            //WebSocket connection
+            let ws = new WebSocket("ws://localhost:8000/ws");
+            ws.onmessage = function(event) {
+                let messages = document.getElementById('messages')
+                let message = document.createElement('li')
+                let content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)
+            };
+            function sendMessage(event) {
+                let input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+    </body>
+</html>
